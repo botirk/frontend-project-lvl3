@@ -1,42 +1,41 @@
 {
-  "name": "webpack-package",
-  "version": "0.1.0",
-  "description": "",
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "studying frontend & rss",
+  "private": true,
   "scripts": {
-    "test": "jest --colors"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hexlet-boilerplates/webpack-package.git"
+    "url": "git+https://github.com/botirk/frontend-project-lvl3.git"
   },
-  "author": "Kirill Mokevnin",
+  "keywords": [
+    "educational",
+    "studying",
+    "rss",
+    "frontend"
+  ],
+  "author": "Ivan",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hexlet-boilerplates/webpack-package/issues"
+    "url": "https://github.com/botirk/frontend-project-lvl3/issues"
   },
-  "homepage": "https://github.com/hexlet-boilerplates/webpack-package#readme",
-  "jest": {
-    "verbose": true,
-    "testURL": "http://localhost/"
-  },
-  "main": "src/init.js",
+  "homepage": "https://github.com/botirk/frontend-project-lvl3#readme",
   "devDependencies": {
-    "@babel/core": "^7.13.14",
-    "@babel/preset-env": "^7.13.12",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^26.6.3",
-    "babel-loader": "^8.2.2",
-    "debug": "^4.3.1",
-    "eslint": "^7.23.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-plugin-babel": "^5.3.1",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.3.4",
+    "eslint": "^7.26.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.0",
+    "css-loader": "^5.2.4",
     "html-webpack-plugin": "^5.3.1",
-    "jest": "^26.6.3",
-    "jest-cli": "^26.6.3",
-    "webpack": "^5.31.0",
-    "webpack-cli": "^4.6.0",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2"
-  }
+  },
+  "type": "module"
 }
