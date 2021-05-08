@@ -1,9 +1,6 @@
 install:
 	npm install
 	
-run:
-	bin/index.js -h
-	
 lint:
 	npx eslint .
 
