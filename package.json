@@ -1,0 +1,30 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "studying frontend & rss",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/botirk/frontend-project-lvl3.git"
+  },
+  "keywords": [
+    "educational",
+    "studying",
+    "rss",
+    "frontend"
+  ],
+  "author": "Ivan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/botirk/frontend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/botirk/frontend-project-lvl3#readme",
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
