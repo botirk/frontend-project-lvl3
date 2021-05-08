@@ -1,5 +1,8 @@
 install:
 	npm install
+
+run:
+	npm install && npx webpack
 	
 lint:
 	npx eslint .
