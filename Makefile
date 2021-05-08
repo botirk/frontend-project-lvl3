@@ -1,17 +1,20 @@
-install:
-	npm install
+develop:
+	npx webpack serve
 
-run:
-	npm install && npx webpack
-	
-lint:
-	npx eslint .
+install:
+	npm ci
+
+build:
+	rm -rf dist
+	NODE_ENV=production npx webpack
 
 test:
 	npm test
 
-publish:
-	npm publish --dry-run
+lint:
+	npx eslint .
 
 chmod:
 	sudo chmod -R 775 .
+
+.PHONY: test
