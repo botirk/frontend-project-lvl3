@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "studying frontend & rss",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "jest"
   },
@@ -25,6 +25,17 @@
   "devDependencies": {
     "eslint": "^7.26.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1"
-  }
+    "eslint-plugin-import": "^2.22.1",
+    "html-webpack-plugin": "^5.3.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.0",
+    "css-loader": "^5.2.4"
+  },
+  "type": "module"
 }
