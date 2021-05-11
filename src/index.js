@@ -1,5 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import i18next from 'i18next';
 import view from './state+view.js';
+import ru from './translations/ru.js';
+import template from './translations/template.js';
 
 const isValidUrl = (url) => {
   try {
@@ -10,7 +13,10 @@ const isValidUrl = (url) => {
   return true;
 };
 
-const init = () => {
+const init = async () => {
+  // languages
+  await i18next.init({ lng: 'ru', debug: true, resources: { ru } });
+  template();
   // const elements
   const form = document.getElementsByTagName('form')[0];
   // view + model

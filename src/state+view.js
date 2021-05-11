@@ -1,4 +1,5 @@
 import onChange from 'on-change';
+import i18next from 'i18next';
 import parseRSS from './parseRSS.js';
 
 const sayError = (text, feedback, input) => {
@@ -34,7 +35,7 @@ export default () => {
     console.log(path, value);
     if (path === 'isValidUrl')
       if (value === false) {
-        sayError('Ссылка должна быть валидным URL', feedback, input);
+        sayError(i18next.t('urlInvalid'), feedback, input);
       } else {
         input.classList.remove('is-invalid');
         feedback.textContent = '';
@@ -48,15 +49,15 @@ export default () => {
           .catch((e) => {
             console.error(e);
             view.currentRSS = undefined;
-            sayError('Ресурс не содержит валидный RSS', feedback, input);
+            sayError(i18next.t('notRSS'), feedback, input);
           }).then((result) => {
             if (result === undefined) return;
             else if (view.feedList.filter((feed) => feed.link === result.link).length > 0) {
-              sayError('RSS уже существует', feedback, input);
+              sayError(i18next.t('repeatRSS'), feedback, input);
             } else {
               view.feedList.push(result);
               view.postList = view.postList.concat(result.items); //todo: need sorting and merging
-              saySuccess('RSS успешно загружен', feedback, input);
+              saySuccess(i18next.t('RSS200'), feedback, input);
             }
             view.currentRSS = undefined;
           });
@@ -68,7 +69,7 @@ export default () => {
       feeds.innerHTML = '';
       if (state.feedList.length > 0) {
         const name = document.createElement('h2');
-        name.textContent = 'Фиды';
+        name.textContent = i18next.t('feeds');
         feeds.appendChild(name);
 
         const ul = document.createElement('ul');
@@ -95,7 +96,7 @@ export default () => {
       posts.innerHTML = '';
       if (state.postList.length > 0) {
         const name = document.createElement('h2');
-        name.textContent = 'Посты';
+        name.textContent = i18next.t('posts');
         posts.appendChild(name);
 
         const ul = document.createElement('ul');
@@ -126,7 +127,7 @@ export default () => {
         button.classList.add('btn-sm');
         button.dataset.id = '2';
         button.dataset.target = '#modal';
-        button.textContent = 'Просмотр';
+        button.textContent = i18next.t('view');
         li.appendChild(button);
 
         ul.appendChild(li);
