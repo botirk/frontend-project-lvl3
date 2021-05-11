@@ -1,3 +1,5 @@
+### Example:
+[Deployed project](https://frontend-project-lvl3-botirk.vercel.app/ "Click me")
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/botirk/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/botirk/frontend-project-lvl3/actions)
 ### Codeclimate code quality:
@@ -6,5 +8,3 @@
 [![Node.js linter](https://github.com/botirk/frontend-project-lvl3/actions/workflows/node.js%20lint.yml/badge.svg)](https://github.com/botirk/frontend-project-lvl2/actions/workflows/node.js%20lint.yml)
 ### Github Actions: Jest
 [![Node.js tests](https://github.com/botirk/frontend-project-lvl3/actions/workflows/node.js%20tests.yml/badge.svg)](https://github.com/botirk/frontend-project-lvl2/actions/workflows/node.js%20tests.yml)
-### Example:
-[Deployed project](https://frontend-project-lvl3-17q3dwwtf-botirk.vercel.app/ "Click me")
