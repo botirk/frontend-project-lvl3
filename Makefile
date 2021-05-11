@@ -1,8 +1,11 @@
 install:
 	npm install
 
-run:
-	npm install && npx webpack
+build:
+	npx webpack
+
+serve:
+	npx webpack serve
 	
 lint:
 	npx eslint .
