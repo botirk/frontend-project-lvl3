@@ -13,5 +13,7 @@ export default {
     example: 'Пример: https://ru.hexlet.io/lessons.rss',
     add: 'Добавить',
     link: 'ссылка RSS',
+    close: 'Закрыть',
+    read: 'Читать полностью ',
   }
 }

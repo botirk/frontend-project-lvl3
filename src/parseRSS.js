@@ -9,15 +9,18 @@ const parseRSS = (link, text) => {
   const channel = documentElement.firstElementChild;
   if (channel.tagName !== 'channel') throw new Error(`documentElement.firstElementChild: ${tagName}`);
   const channelChildren = Array.from(channel.children);
-  const title = channelChildren.filter((e) => e.tagName === 'title')[0].innerHTML;
-  const description = channelChildren.filter((e) => e.tagName === 'description')[0].innerHTML;
+  const title = channelChildren.filter((e) => e.tagName === 'title')[0].textContent;
+  const description = channelChildren.filter((e) => e.tagName === 'description')[0].textContent;
   const items = channelChildren.filter((e) => e.tagName === 'item').map((e) => {
     const itemChildren = Array.from(e.children);
-    return {
-      title: itemChildren.filter((e) => e.tagName === "title")[0].innerHTML,
-      description: itemChildren.filter((e) => e.tagName === 'description')[0].innerHTML,
-      link: itemChildren.filter((e) => e.tagName === 'link')[0].innerHTML
+    const result = {
+      title: itemChildren.filter((e) => e.tagName === "title")[0].textContent,
+      description: itemChildren.filter((e) => e.tagName === 'description')[0].textContent,
+      date: new Date(itemChildren.filter((e) => e.tagName === 'pubDate')[0].textContent),
+      link: itemChildren.filter((e) => e.tagName === 'link')[0].textContent,
     };
+    result.hash = () => `${result.date}${result.link}`;
+    return result;
   });
 
   const result = {

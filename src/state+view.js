@@ -16,8 +16,116 @@ const saySuccess = (text, feedback, input) => {
   input.classList.remove('is-invalid');
 }
 
+const downloadRSS = (link) => {
+  return fetch(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}` 
+    , {cache: "no-store"})
+    .then((resp) => resp.text())
+    .then((text) => parseRSS(link, text));
+}
+
+const fillFeeds = (feedsHTML, feedList) => {
+  feedsHTML.innerHTML = '';
+  if (feedList.length > 0) {
+    const name = document.createElement('h2');
+    name.textContent = i18next.t('feeds');
+    feedsHTML.appendChild(name);
+
+    const ul = document.createElement('ul');
+    ul.classList.add('list-group');
+    ul.classList.add('mb-5');
+    feedsHTML.appendChild(ul);
+  }
+  const ul = feedsHTML.lastElementChild;
+  feedList.forEach((feed) => {
+    const li = document.createElement('li');
+    li.classList.add('list-group-item');
+
+    const title = document.createElement('h3');
+    title.textContent = feed.title;
+    li.appendChild(title);
+
+    const desc = document.createElement('p');
+    desc.textContent = feed.description;
+    li.appendChild(desc);
+
+    ul.appendChild(li);
+  });
+}
+
+const filterAddPosts = (postList, candidates) => {
+  const existing = postList.reduce((acc, post) => { 
+    acc[post.hash()] = true;
+    return acc;
+  }, {});
+  return candidates.filter((post) => existing[post.hash()] !== true)
+    .concat(postList)
+    .sort((a, b) => b.date - a.date);
+}
+
+const setRead = (link, post = undefined, readenList = undefined) => {
+  link.classList.remove('font-weight-bold');
+  link.classList.add('font-weight-normal');
+  if (post !== undefined && readenList !== undefined) readenList[post.hash()] = true;
+}
+
+const fillPosts = (postsHTML, postList, readenList, modalTitle, modalBody, modalLink) => {
+  postsHTML.innerHTML = '';
+  if (postList.length > 0) {
+    const name = document.createElement('h2');
+    name.textContent = i18next.t('posts');
+    postsHTML.appendChild(name);
+
+    const ul = document.createElement('ul');
+    ul.classList.add('list-group');
+    postsHTML.appendChild(ul);
+  }
+  const ul = postsHTML.lastElementChild;
+  postList.forEach((post) => {
+    const li = document.createElement('li');
+    li.classList.add('list-group-item');
+    li.classList.add('d-flex');
+    li.classList.add('justify-content-between');
+    li.classList.add('align-items-start');
+
+    const link = document.createElement('a');
+    link.href = post.link;
+    link.classList.add('font-weight-bold');
+    if (readenList[post.hash()] === true) setRead(link);
+    link.dataset.id = '2';
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = post.title;
+    link.addEventListener('click', () => {
+      setRead(link, post, readenList);
+    });
+    li.appendChild(link);
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.classList.add('btn');
+    button.classList.add('btn-primary');
+    button.classList.add('btn-sm');
+    button.dataset.id = '2';
+    button.dataset.toggle = 'modal';
+    button.dataset.target = '#modal';
+    button.textContent = i18next.t('view');
+    button.addEventListener('click', () => {
+      modalTitle.textContent = post.title;
+      modalBody.textContent = post.description;
+      modalLink.href = post.link;
+      setRead(link, post, readenList);
+    });
+    li.appendChild(button);
+
+    ul.appendChild(li);
+  });
+}
+
 export default () => {
   // const elements
+  const modalTitle = document.getElementsByClassName('modal-title')[0];
+  const modalBody = document.getElementsByClassName('modal-body')[0];
+  const modalLink = document.getElementsByClassName('full-article')[0];
   const input = document.getElementsByTagName('input')[0];
   const feedback = document.getElementsByClassName('feedback')[0];
   const add = document.getElementsByTagName('button')[0];
@@ -28,7 +136,8 @@ export default () => {
     isValidUrl: true,
     currentRSS: undefined,
     feedList: [],
-    postList: []
+    postList: [],
+    readenList: [],
   }
   // view
   const view = onChange(state, (path, value) => {
@@ -43,9 +152,7 @@ export default () => {
     else if (path === 'currentRSS') {
       if (typeof value === 'string') {
         add.disabled = true;
-        fetch(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(value)}`)
-          .then((resp) => resp.text())
-          .then((text) => parseRSS(value, text))
+        downloadRSS(value)
           .catch((e) => {
             console.error(e);
             view.currentRSS = undefined;
@@ -56,7 +163,7 @@ export default () => {
               sayError(i18next.t('repeatRSS'), feedback, input);
             } else {
               view.feedList.push(result);
-              view.postList = view.postList.concat(result.items); //todo: need sorting and merging
+              view.postList = filterAddPosts(view.postList, result.items);
               saySuccess(i18next.t('RSS200'), feedback, input);
             }
             view.currentRSS = undefined;
@@ -66,84 +173,33 @@ export default () => {
         input.value = '';
       } else throw new Error('view.currentRSS = (undefined | string)');
     } else if (path === 'feedList') {
-      feeds.innerHTML = '';
-      if (state.feedList.length > 0) {
-        const name = document.createElement('h2');
-        name.textContent = i18next.t('feeds');
-        feeds.appendChild(name);
-
-        const ul = document.createElement('ul');
-        ul.classList.add('list-group');
-        ul.classList.add('mb-5');
-        feeds.appendChild(ul);
-      }
-      const ul = feeds.lastElementChild;
-      state.feedList.forEach((feed) => {
-        const li = document.createElement('li');
-        li.classList.add('list-group-item');
-
-        const title = document.createElement('h3');
-        title.textContent = feed.title;
-        li.appendChild(title);
-
-        const desc = document.createElement('p');
-        desc.textContent = feed.description;
-        li.appendChild(desc);
-
-        ul.appendChild(li);
-      });
+      fillFeeds(feeds, view.feedList);
     } else if (path === 'postList') {
-      posts.innerHTML = '';
-      if (state.postList.length > 0) {
-        const name = document.createElement('h2');
-        name.textContent = i18next.t('posts');
-        posts.appendChild(name);
-
-        const ul = document.createElement('ul');
-        ul.classList.add('list-group');
-        posts.appendChild(ul);
-      }
-      const ul = posts.lastElementChild;
-      state.postList.forEach((post) => {
-        const li = document.createElement('li');
-        li.classList.add('list-group-item');
-        li.classList.add('d-flex');
-        li.classList.add('justify-content-between');
-        li.classList.add('align-items-start');
-
-        const link = document.createElement('a');
-        link.href = post.link;
-        link.classList.add('font-weight-bold');
-        link.dataset.id = '2';
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = post.title;
-        li.appendChild(link);
-
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.classList.add('btn');
-        button.classList.add('btn-primary');
-        button.classList.add('btn-sm');
-        button.dataset.id = '2';
-        button.dataset.target = '#modal';
-        button.textContent = i18next.t('view');
-        li.appendChild(button);
-
-        ul.appendChild(li);
-      });
+      fillPosts(posts, view.postList, view.readenList, modalTitle, modalBody, modalLink);
     }
   });
-
+  // refreshing
+  const refresh = () => {
+    const promises = [];
+    view.feedList.forEach((feed) => {
+      promises.push(downloadRSS(feed.link)
+        .catch((e) => console.error(e))
+        .then((result) => {
+        if (result === undefined) return;
+        view.postList = filterAddPosts(view.postList, result.items);
+      }));
+    });
+    Promise.all(promises).then(() => setTimeout(refresh, 5000));
+  };
+  setTimeout(refresh, 5000);
+  // result
   return view;
 }
 
-/* <div class="col-md-10 col-lg-8 mx-auto posts">
-  <h2>Посты</h2>
-  <ul class="list-group">
-    <li class="list-group-item d-flex justify-content-between align-items-start">
-      <a href="https://ru.hexlet.io/courses/python-setup-environment/lessons/poetry-and-packaging/theory_unit" class="font-weight-bold" data-id="2" target="_blank" rel="noopener noreferrer">Сборка дистрибутива пакета с помощью Poetry / Python: Настройка окружения
-      </a>
-      <button type="button" class="btn btn-primary btn-sm" data-id="2" data-toggle="modal" data-target="#modal">Просмотр
-      </button>
-      </li> */
+//<ul class="list-group">
+//  <li class="list-group-item d-flex justify-content-between align-items-start">
+//    <a href="https://ru.hexlet.io/courses/python-setup-environment/lessons/poetry-and-packaging/theory_unit" class="font-weight-normal" data-id="2" target="_blank" rel="noopener noreferrer">Сборка дистрибутива пакета с помощью Poetry / Python: Настройка окружения</a>
+//    <button type="button" class="btn btn-primary btn-sm" data-id="2" data-toggle="modal" data-target="#modal">Просмотр</button>
+//  </li>
+//</ul>
+//<button type="button" class="btn btn-primary btn-sm" data-id="2" data-togle="modal" data-target="#modal">Просмотр</button>
