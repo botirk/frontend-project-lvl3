@@ -1,5 +1,8 @@
 /* eslint-disable import/extensions */
+import i18next from 'i18next';
 import view from './state+view.js';
+import template from './translations/template.js';
+import ru from './translations/ru.js';
 
 const isValidUrl = (url) => {
   try {
@@ -11,6 +14,10 @@ const isValidUrl = (url) => {
 };
 
 const init = () => {
+  // language
+  i18next.init({ lng: 'ru', debug: true, resources: { ru } })
+    .catch(() => undefined)
+    .then(() => template());
   // const elements
   const form = document.getElementsByTagName('form')[0];
   // view + model
