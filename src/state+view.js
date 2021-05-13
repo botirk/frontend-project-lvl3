@@ -18,11 +18,9 @@ const saySuccess = (text, feedback, input) => {
   input.classList.remove('is-invalid');
 };
 
-const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}`,
-  //axios(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}&timestamp=${new Date().getTime()}`,
+const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}&timestamp=${new Date().getTime()}`,
   { responseType: 'text' })
-  .then((resp) => resp.data)
-  .then((text) => parseRSS(link, text));
+  .then((resp) => parseRSS(link, resp.data));
 
 const fillFeeds = (feedsHTML, feedList) => {
   feedsHTML.innerHTML = '';
@@ -183,8 +181,10 @@ export default () => {
     const promises = [];
     view.feedList.forEach((feed) => {
       promises.push(downloadRSS(feed.link)
-        .catch(() => undefined)
-        .then((result) => {
+        .catch((e) => {
+          console.error(e);
+          return undefined;
+        }).then((result) => {
           if (result === undefined) return;
           view.postList = filterAddPosts(view.postList, result.items);
         }));
