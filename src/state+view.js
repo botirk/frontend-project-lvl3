@@ -152,7 +152,8 @@ export default () => {
       if (typeof value === 'string') {
         add.disabled = true;
         downloadRSS(value)
-          .catch(() => {
+          .catch((e) => {
+            console.error(e);
             view.currentRSS = undefined;
             sayError(i18next.t('notRSS'), feedback, input);
           }).then((result) => {
