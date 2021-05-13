@@ -1,6 +1,7 @@
 /* eslint-disable import/extensions, no-param-reassign */
 import onChange from 'on-change';
 import i18next from 'i18next';
+import axios from 'axios';
 import parseRSS from './parseRSS.js';
 
 const sayError = (text, feedback, input) => {
@@ -17,9 +18,9 @@ const saySuccess = (text, feedback, input) => {
   input.classList.remove('is-invalid');
 };
 
-const downloadRSS = (link) => fetch(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}`,
-  { cache: 'no-store' })
-  .then((resp) => resp.text())
+const downloadRSS = (link) => axios.get(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}`,
+  { responseType: 'text', headers: { Pragma: 'no-cache' } })
+  .then((resp) => resp.data)
   .then((text) => parseRSS(link, text));
 
 const fillFeeds = (feedsHTML, feedList) => {
