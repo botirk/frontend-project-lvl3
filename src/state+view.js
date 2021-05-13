@@ -19,7 +19,7 @@ const saySuccess = (text, feedback, input) => {
 };
 
 const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}&disableCache=true`,
-  { responseType: 'text' })
+  )
   .then((resp) => parseRSS(link, resp.data));
 
 const fillFeeds = (feedsHTML, feedList) => {
