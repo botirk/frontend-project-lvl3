@@ -18,7 +18,7 @@ const saySuccess = (text, feedback, input) => {
   input.classList.remove('is-invalid');
 };
 
-const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}`,
+const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}&disableCache=true`,
   { responseType: 'text' })
   .then((resp) => parseRSS(link, resp.data));
 
