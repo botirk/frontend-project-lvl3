@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import i18next from 'i18next';
 import view from './state+view.js';
 import ru from './translations/ru.js';
@@ -5,7 +6,7 @@ import template from './translations/template.js';
 
 const isValidUrl = (url) => {
   try {
-    new URL(url);
+    URL(url);
   } catch (e) {
     return false;
   }

@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions, no-param-reassign */
 import onChange from 'on-change';
 import i18next from 'i18next';
 import parseRSS from './parseRSS.js';
@@ -7,21 +8,19 @@ const sayError = (text, feedback, input) => {
   feedback.classList.add('text-danger');
   feedback.classList.remove('text-success');
   input.classList.add('is-invalid');
-}
+};
 
 const saySuccess = (text, feedback, input) => {
   feedback.textContent = text;
   feedback.classList.remove('text-danger');
   feedback.classList.add('text-success');
   input.classList.remove('is-invalid');
-}
+};
 
-const downloadRSS = (link) => {
-  return fetch(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}` 
-    , {cache: "no-store"})
-    .then((resp) => resp.text())
-    .then((text) => parseRSS(link, text));
-}
+const downloadRSS = (link) => fetch(`https://hexlet-allorigins.herokuapp.com/raw?url=${encodeURIComponent(link)}`,
+  { cache: 'no-store' })
+  .then((resp) => resp.text())
+  .then((text) => parseRSS(link, text));
 
 const fillFeeds = (feedsHTML, feedList) => {
   feedsHTML.innerHTML = '';
@@ -50,23 +49,23 @@ const fillFeeds = (feedsHTML, feedList) => {
 
     ul.appendChild(li);
   });
-}
+};
 
 const filterAddPosts = (postList, candidates) => {
-  const existing = postList.reduce((acc, post) => { 
+  const existing = postList.reduce((acc, post) => {
     acc[post.hash()] = true;
     return acc;
   }, {});
   return candidates.filter((post) => existing[post.hash()] !== true)
     .concat(postList)
     .sort((a, b) => b.date - a.date);
-}
+};
 
 const setRead = (link, post = undefined, readenList = undefined) => {
   link.classList.remove('font-weight-bold');
   link.classList.add('font-weight-normal');
   if (post !== undefined && readenList !== undefined) readenList[post.hash()] = true;
-}
+};
 
 const fillPosts = (postsHTML, postList, readenList, modalTitle, modalBody, modalLink) => {
   postsHTML.innerHTML = '';
@@ -119,7 +118,7 @@ const fillPosts = (postsHTML, postList, readenList, modalTitle, modalBody, modal
 
     ul.appendChild(li);
   });
-}
+};
 
 export default () => {
   // const elements
@@ -138,28 +137,26 @@ export default () => {
     feedList: [],
     postList: [],
     readenList: [],
-  }
+  };
   // view
   const view = onChange(state, (path, value) => {
-    console.log(path, value);
-    if (path === 'isValidUrl')
+    if (path === 'isValidUrl') {
       if (value === false) {
         sayError(i18next.t('urlInvalid'), feedback, input);
       } else {
         input.classList.remove('is-invalid');
         feedback.textContent = '';
       }
-    else if (path === 'currentRSS') {
+    } else if (path === 'currentRSS') {
       if (typeof value === 'string') {
         add.disabled = true;
         downloadRSS(value)
-          .catch((e) => {
-            console.error(e);
+          .catch(() => {
             view.currentRSS = undefined;
             sayError(i18next.t('notRSS'), feedback, input);
           }).then((result) => {
             if (result === undefined) return;
-            else if (view.feedList.filter((feed) => feed.link === result.link).length > 0) {
+            if (view.feedList.filter((feed) => feed.link === result.link).length > 0) {
               sayError(i18next.t('repeatRSS'), feedback, input);
             } else {
               view.feedList.push(result);
@@ -183,23 +180,15 @@ export default () => {
     const promises = [];
     view.feedList.forEach((feed) => {
       promises.push(downloadRSS(feed.link)
-        .catch((e) => console.error(e))
+        .catch(() => undefined)
         .then((result) => {
-        if (result === undefined) return;
-        view.postList = filterAddPosts(view.postList, result.items);
-      }));
+          if (result === undefined) return;
+          view.postList = filterAddPosts(view.postList, result.items);
+        }));
     });
     Promise.all(promises).then(() => setTimeout(refresh, 5000));
   };
   setTimeout(refresh, 5000);
   // result
   return view;
-}
-
-//<ul class="list-group">
-//  <li class="list-group-item d-flex justify-content-between align-items-start">
-//    <a href="https://ru.hexlet.io/courses/python-setup-environment/lessons/poetry-and-packaging/theory_unit" class="font-weight-normal" data-id="2" target="_blank" rel="noopener noreferrer">Сборка дистрибутива пакета с помощью Poetry / Python: Настройка окружения</a>
-//    <button type="button" class="btn btn-primary btn-sm" data-id="2" data-toggle="modal" data-target="#modal">Просмотр</button>
-//  </li>
-//</ul>
-//<button type="button" class="btn btn-primary btn-sm" data-id="2" data-togle="modal" data-target="#modal">Просмотр</button>
+};

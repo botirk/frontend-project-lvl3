@@ -23,4 +23,4 @@ export default () => {
 
   const example = document.getElementsByClassName('text-muted')[0];
   example.textContent = i18next.t('example');
-}
+};

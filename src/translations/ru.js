@@ -15,5 +15,5 @@ export default {
     link: 'ссылка RSS',
     close: 'Закрыть',
     read: 'Читать полностью ',
-  }
-}
+  },
+};
