@@ -127,7 +127,7 @@ export default () => {
   const modalLink = document.getElementsByClassName('full-article')[0];
   const input = document.getElementsByTagName('input')[0];
   const feedback = document.getElementsByClassName('feedback')[0];
-  const add = document.getElementsByTagName('button')[0];
+  const add = document.getElementsByTagName('button')[2];
   const feeds = document.getElementsByClassName('feeds')[0];
   const posts = document.getElementsByClassName('posts')[0];
   // model

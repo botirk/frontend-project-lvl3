@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "studying frontend & rss",
   "private": true,
+  "main": "src/init.js",
   "scripts": {
     "test": "jest",
     "build": "webpack"
