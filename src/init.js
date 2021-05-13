@@ -6,11 +6,11 @@ import template from './translations/template.js';
 
 const isValidUrl = (url) => {
   try {
-    URL(url);
+    const test = new URL(url);
+    return test !== undefined;
   } catch (e) {
     return false;
   }
-  return true;
 };
 
 const init = () => {
