@@ -18,8 +18,7 @@ const saySuccess = (text, feedback, input) => {
   input.classList.remove('is-invalid');
 };
 
-const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(link)}&disableCache=true`,
-  )
+const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(link)}&disableCache=true`)
   .then((resp) => parseRSS(link, resp.data.contents));
 
 const fillFeeds = (feedsHTML, feedList) => {
@@ -149,22 +148,21 @@ export default () => {
       }
     } else if (path === 'currentRSS') {
       if (typeof value === 'string') {
+        if (view.feedList.filter((feed) => feed.link === value).length > 0) {
+          sayError(i18next.t('repeatRSS'), feedback, input);
+          view.currentRSS = undefined;
+          return;
+        }
         add.disabled = true;
         downloadRSS(value)
-          .catch((e) => {
-            //console.error(e);
+          .catch(() => {
             view.currentRSS = undefined;
             sayError(i18next.t('notRSS'), feedback, input);
           }).then((result) => {
             if (result === undefined) return;
-            if (view.feedList.filter((feed) => feed.link === result.link).length > 0) {
-              console.error(new Error('repeatRSS'));
-              sayError(i18next.t('repeatRSS'), feedback, input);
-            } else {
-              view.feedList.push(result);
-              view.postList = filterAddPosts(view.postList, result.items);
-              saySuccess(i18next.t('RSS200'), feedback, input);
-            }
+            view.feedList.push(result);
+            view.postList = filterAddPosts(view.postList, result.items);
+            saySuccess(i18next.t('RSS200'), feedback, input);
             view.currentRSS = undefined;
           });
       } else if (value === undefined) {
@@ -182,10 +180,8 @@ export default () => {
     const promises = [];
     view.feedList.forEach((feed) => {
       promises.push(downloadRSS(feed.link)
-        .catch((e) => {
-          //console.error(e);
-          return undefined;
-        }).then((result) => {
+        .catch(() => undefined)
+        .then((result) => {
           if (result === undefined) return;
           view.postList = filterAddPosts(view.postList, result.items);
         }));
