@@ -152,12 +152,13 @@ export default () => {
         add.disabled = true;
         downloadRSS(value)
           .catch((e) => {
-            console.error(e);
+            //console.error(e);
             view.currentRSS = undefined;
             sayError(i18next.t('notRSS'), feedback, input);
           }).then((result) => {
             if (result === undefined) return;
             if (view.feedList.filter((feed) => feed.link === result.link).length > 0) {
+              console.error(new Error('repeatRSS'));
               sayError(i18next.t('repeatRSS'), feedback, input);
             } else {
               view.feedList.push(result);
@@ -182,7 +183,7 @@ export default () => {
     view.feedList.forEach((feed) => {
       promises.push(downloadRSS(feed.link)
         .catch((e) => {
-          console.error(e);
+          //console.error(e);
           return undefined;
         }).then((result) => {
           if (result === undefined) return;
