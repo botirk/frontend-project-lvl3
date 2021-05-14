@@ -160,7 +160,7 @@ export default () => {
         add.disabled = true;
         downloadRSS(value)
           .catch((e) => {
-            // console.error(e);
+             console.error(e);
             view.currentRSS = undefined;
             if (e.message.search(/network/i) !== -1) sayError(i18next.t('networkError'), feedback, input);
             else sayError(i18next.t('notRSS'), feedback, input);
