@@ -162,7 +162,8 @@ export default () => {
           .catch((e) => {
             console.error(e);
             view.currentRSS = undefined;
-            if (e.message.search(/network/i) !== -1) sayError(i18next.t('networkError'), feedback, input);
+            if (e.message.search(/network/i) !== -1
+              || e.message.search(/internet/i) !== -1) sayError(i18next.t('networkError'), feedback, input);
             else sayError(i18next.t('notRSS'), feedback, input);
           }).then((result) => {
             if (result === undefined) return;
