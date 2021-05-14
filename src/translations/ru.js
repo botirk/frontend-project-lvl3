@@ -7,6 +7,7 @@ export default {
     feeds: 'Фиды',
     posts: 'Посты',
     view: 'Просмотр',
+    networkError: 'Ошибка сети',
     // template translation
     promo: 'Начните читать RSS сегодня! Это легко, это красиво.',
     title: 'RSS агрегатор',

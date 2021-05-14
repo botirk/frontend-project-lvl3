@@ -19,7 +19,11 @@ const saySuccess = (text, feedback, input) => {
 };
 
 const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(link)}&disableCache=true`)
-  .then((resp) => parseRSS(link, resp.data.contents));
+  .then((resp) => {
+    const { status, contents } = resp.data;
+    if (status.error !== undefined) throw new Error(status.error.code);
+    return parseRSS(link, contents);
+  });
 
 const fillFeeds = (feedsHTML, feedList) => {
   feedsHTML.innerHTML = '';
@@ -155,9 +159,11 @@ export default () => {
         }
         add.disabled = true;
         downloadRSS(value)
-          .catch(() => {
+          .catch((e) => {
+            // console.error(e);
             view.currentRSS = undefined;
-            sayError(i18next.t('notRSS'), feedback, input);
+            if (e.message.search(/network/i) !== -1) sayError(i18next.t('networkError'), feedback, input);
+            else sayError(i18next.t('notRSS'), feedback, input);
           }).then((result) => {
             if (result === undefined) return;
             view.feedList.push(result);
