@@ -161,7 +161,7 @@ export default () => {
         input.readOnly = true;
         downloadRSS(value)
           .catch((e) => {
-            console.error(e);
+            // console.error(e);
             view.currentRSS = undefined;
             if (e.message.search(/network/i) !== -1
               || e.message.search(/internet/i) !== -1) sayError(i18next.t('networkError'), feedback, input);
