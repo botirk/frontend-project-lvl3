@@ -158,6 +158,7 @@ export default () => {
           return;
         }
         add.disabled = true;
+        input.readOnly = true;
         downloadRSS(value)
           .catch((e) => {
             console.error(e);
@@ -174,6 +175,7 @@ export default () => {
           });
       } else if (value === undefined) {
         add.disabled = false;
+        input.readOnly = false;
         input.value = '';
       } else throw new Error('view.currentRSS = (undefined | string)');
     } else if (path === 'feedList') {
