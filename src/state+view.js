@@ -189,7 +189,6 @@ export default () => {
     const promises = [];
     view.feedList.forEach((feed) => {
       promises.push(downloadRSS(feed.link)
-        .catch(() => undefined)
         .then((result) => {
           if (result === undefined) return;
           view.postList = filterAddPosts(view.postList, result.items);

@@ -16,7 +16,6 @@ const isValidUrl = (url) => {
 const init = () => {
   // language
   i18next.init({ lng: 'ru', debug: true, resources: { ru } })
-    .catch(() => undefined)
     .then(() => template());
   // const elements
   const form = document.getElementsByTagName('form')[0];
