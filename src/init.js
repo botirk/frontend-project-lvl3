@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import i18next from 'i18next';
 import view from './state+view.js';
-import template from './translations/template.js';
+import i18fill from './translations/i18fill.js';
 import ru from './translations/ru.js';
 
 const isValidUrl = (url) => {
@@ -16,7 +16,7 @@ const isValidUrl = (url) => {
 const init = () => {
   // language
   i18next.init({ lng: 'ru', debug: true, resources: { ru } })
-    .then(() => template());
+    .then(i18fill);
   // const elements
   const form = document.getElementsByTagName('form')[0];
   // view + model
