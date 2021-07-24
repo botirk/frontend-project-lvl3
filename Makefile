@@ -2,7 +2,7 @@ install:
 	npm install
 
 build:
-	npx webpack
+	npm build
 
 serve:
 	npx webpack serve

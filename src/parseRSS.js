@@ -1,27 +1,30 @@
+const parser = new DOMParser();
+
+const generateItem = (itemEl) => {
+  const itemChildren = Array.from(itemEl.children);
+  const result = {
+    title: itemChildren.find((el) => el.tagName === 'title').textContent,
+    description: itemChildren.find((el) => el.tagName === 'description').textContent,
+    date: new Date(itemChildren.find((el) => el.tagName === 'pubDate').textContent),
+    link: itemChildren.find((el) => el.tagName === 'link').textContent,
+  };
+  result.hash = () => `${result.date}${result.link}`;
+  return result;
+}
+
 const parseRSS = (link, text) => {
-  const parser = new DOMParser();
   const xml = parser.parseFromString(text, 'application/xml');
   // console.log(xml);
 
   const { documentElement } = xml;
-  const { tagName } = documentElement;
-  if (tagName !== 'rss') throw new Error(`documentElement.tagName: ${tagName}`);
+  if (documentElement.tagName !== 'rss') throw new Error(`documentElement.tagName: ${tagName}`);
   const channel = documentElement.firstElementChild;
   if (channel.tagName !== 'channel') throw new Error(`documentElement.firstElementChild: ${tagName}`);
   const channelChildren = Array.from(channel.children);
-  const title = channelChildren.filter((e) => e.tagName === 'title')[0].textContent;
-  const description = channelChildren.filter((e) => e.tagName === 'description')[0].textContent;
-  const items = channelChildren.filter((e) => e.tagName === 'item').map((e) => {
-    const itemChildren = Array.from(e.children);
-    const result = {
-      title: itemChildren.filter((e1) => e1.tagName === 'title')[0].textContent,
-      description: itemChildren.filter((e1) => e1.tagName === 'description')[0].textContent,
-      date: new Date(itemChildren.filter((e1) => e1.tagName === 'pubDate')[0].textContent),
-      link: itemChildren.filter((e1) => e1.tagName === 'link')[0].textContent,
-    };
-    result.hash = () => `${result.date}${result.link}`;
-    return result;
-  });
+  
+  const title = channelChildren.find((e) => e.tagName === 'title').textContent;
+  const description = channelChildren.find((e) => e.tagName === 'description').textContent;
+  const items = channelChildren.filter((e) => e.tagName === 'item').map(generateItem);
 
   const result = {
     link,
