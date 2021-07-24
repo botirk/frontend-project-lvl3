@@ -3,7 +3,6 @@ import onChange from 'on-change';
 import i18next from 'i18next';
 import axios from 'axios';
 import parseRSS from './parseRSS.js';
-import { NormalModule } from 'webpack';
 
 const sayResult = (isSuccess, text, feedback, input) => {
   feedback.textContent = text;
