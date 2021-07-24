@@ -156,24 +156,24 @@ export default () => {
   };
   onChangeDispatcher.currentRSS = (value) => {
     if (typeof value === 'string') {
-      if (view.feedList.filter((feed) => feed.link === value).length > 0) {
+      if (view.feedList.find((feed) => feed.link === value) !== undefined) {
         sayResult(false, i18next.t('repeatRSS'), feedback, input);
         view.currentRSS = undefined;
         return;
       }
       add.disabled = true;
       input.readOnly = true;
-      downloadRSS(value).catch((e) => {
+      downloadRSS(value).then((result) => {
+        view.feedList.push(result);
+        view.postList = filterAddPosts(view.postList, result.items);
+        sayResult(true, i18next.t('RSS200'), feedback, input);
+        view.currentRSS = undefined;
+      }).catch((e) => {
         // console.error(e);
         view.currentRSS = undefined;
         if (e.message.search(/network/i) !== -1
           || e.message.search(/internet/i) !== -1) sayResult(false, i18next.t('networkError'), feedback, input);
         else sayResult(false, i18next.t('notRSS'), feedback, input);
-      }).then((result) => {
-        view.feedList.push(result);
-        view.postList = filterAddPosts(view.postList, result.items);
-        sayResult(true, i18next.t('RSS200'), feedback, input);
-        view.currentRSS = undefined;
       });
     } else if (value === undefined) {
       add.disabled = false;

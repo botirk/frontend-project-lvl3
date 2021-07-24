@@ -22,9 +22,9 @@ const parseRSS = (link, text) => {
   if (channel.tagName !== 'channel') throw new Error(`documentElement.firstElementChild: ${channel.tagName}`);
   const channelChildren = Array.from(channel.children);
 
-  const title = channelChildren.find((e) => e.tagName === 'title').textContent;
-  const description = channelChildren.find((e) => e.tagName === 'description').textContent;
-  const items = channelChildren.filter((e) => e.tagName === 'item').map(generateItem);
+  const title = channelChildren.find((el) => el.tagName === 'title').textContent;
+  const description = channelChildren.find((el) => el.tagName === 'description').textContent;
+  const items = channelChildren.filter((el) => el.tagName === 'item').map(generateItem);
 
   const result = {
     link,
