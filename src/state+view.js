@@ -4,18 +4,17 @@ import i18next from 'i18next';
 import axios from 'axios';
 import parseRSS from './parseRSS.js';
 
-const sayError = (text, feedback, input) => {
+const sayResult = (isSuccess, text, feedback, input) => {
   feedback.textContent = text;
-  feedback.classList.add('text-danger');
-  feedback.classList.remove('text-success');
-  input.classList.add('is-invalid');
-};
-
-const saySuccess = (text, feedback, input) => {
-  feedback.textContent = text;
-  feedback.classList.remove('text-danger');
-  feedback.classList.add('text-success');
-  input.classList.remove('is-invalid');
+  if (isSuccess === true) {
+    feedback.classList.remove('text-danger');
+    feedback.classList.add('text-success');
+    input.classList.remove('is-invalid');
+  } else {
+    feedback.classList.add('text-danger');
+    feedback.classList.remove('text-success');
+    input.classList.add('is-invalid');
+  }
 };
 
 const downloadRSS = (link) => axios(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(link)}&disableCache=true`)
@@ -149,7 +148,7 @@ export default () => {
   const view = onChange(state, (path, value) => {
     if (path === 'isValidUrl') {
       if (value === false) {
-        sayError(i18next.t('urlInvalid'), feedback, input);
+        sayResult(false, i18next.t('urlInvalid'), feedback, input);
       } else {
         input.classList.remove('is-invalid');
         feedback.textContent = '';
@@ -157,7 +156,7 @@ export default () => {
     } else if (path === 'currentRSS') {
       if (typeof value === 'string') {
         if (view.feedList.filter((feed) => feed.link === value).length > 0) {
-          sayError(i18next.t('repeatRSS'), feedback, input);
+          sayResult(false, i18next.t('repeatRSS'), feedback, input);
           view.currentRSS = undefined;
           return;
         }
@@ -168,13 +167,13 @@ export default () => {
             // console.error(e);
             view.currentRSS = undefined;
             if (e.message.search(/network/i) !== -1
-              || e.message.search(/internet/i) !== -1) sayError(i18next.t('networkError'), feedback, input);
-            else sayError(i18next.t('notRSS'), feedback, input);
+              || e.message.search(/internet/i) !== -1) sayResult(false, i18next.t('networkError'), feedback, input);
+            else sayResult(false, i18next.t('notRSS'), feedback, input);
           }).then((result) => {
             if (result === undefined) return;
             view.feedList.push(result);
             view.postList = filterAddPosts(view.postList, result.items);
-            saySuccess(i18next.t('RSS200'), feedback, input);
+            sayResult(true, i18next.t('RSS200'), feedback, input);
             view.currentRSS = undefined;
           });
       } else if (value === undefined) {
