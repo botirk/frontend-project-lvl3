@@ -163,20 +163,18 @@ export default () => {
       }
       add.disabled = true;
       input.readOnly = true;
-      downloadRSS(value)
-        .catch((e) => {
-          // console.error(e);
-          view.currentRSS = undefined;
-          if (e.message.search(/network/i) !== -1
-            || e.message.search(/internet/i) !== -1) sayResult(false, i18next.t('networkError'), feedback, input);
-          else sayResult(false, i18next.t('notRSS'), feedback, input);
-        }).then((result) => {
-          if (result === undefined) return;
-          view.feedList.push(result);
-          view.postList = filterAddPosts(view.postList, result.items);
-          sayResult(true, i18next.t('RSS200'), feedback, input);
-          view.currentRSS = undefined;
-        });
+      downloadRSS(value).catch((e) => {
+        // console.error(e);
+        view.currentRSS = undefined;
+        if (e.message.search(/network/i) !== -1
+          || e.message.search(/internet/i) !== -1) sayResult(false, i18next.t('networkError'), feedback, input);
+        else sayResult(false, i18next.t('notRSS'), feedback, input);
+      }).then((result) => {
+        view.feedList.push(result);
+        view.postList = filterAddPosts(view.postList, result.items);
+        sayResult(true, i18next.t('RSS200'), feedback, input);
+        view.currentRSS = undefined;
+      });
     } else if (value === undefined) {
       add.disabled = false;
       input.readOnly = false;
