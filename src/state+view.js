@@ -186,7 +186,12 @@ export default () => {
     fillPosts(posts, value, view.readenList, modalTitle, modalBody, modalLink)
   );
 
-  const view = onChange(state, (path, value) => onChangeDispatcher[path](value));
+  const view = onChange(
+    state,
+    (path, value) => ((path.substr(0, 10) !== 'readenList')
+      ? onChangeDispatcher[path](value)
+      : undefined),
+  );
   // refreshing
   const refresh = () => {
     const promises = view.feedList.map((feed) => downloadRSS(feed.link)

@@ -15,8 +15,13 @@ const isValidUrl = (url) => {
 
 const init = () => {
   // language
-  i18next.init({ lng: 'ru', debug: true, resources: { ru } })
-    .then(i18fill);
+  if (!i18next.isInitialized) {
+    i18next.init({
+      lng: 'ru',
+      debug: process.env.NODE_ENV !== 'production',
+      resources: { ru },
+    }).then(i18fill);
+  }
   // const elements
   const form = document.getElementsByTagName('form')[0];
   // view + model
