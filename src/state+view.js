@@ -1,4 +1,4 @@
-/* eslint-disable import/extensions, no-param-reassign */
+/* eslint-disable import/extensions, no-param-reassign, no-use-before-define */
 import onChange from 'on-change';
 import i18next from 'i18next';
 import axios from 'axios';
@@ -145,58 +145,57 @@ export default () => {
     readenList: [],
   };
   // view
-  const view = onChange(state, (path, value) => {
-    if (path === 'isValidUrl') {
-      if (value === false) {
-        sayResult(false, i18next.t('urlInvalid'), feedback, input);
-      } else {
-        input.classList.remove('is-invalid');
-        feedback.textContent = '';
-      }
-    } else if (path === 'currentRSS') {
-      if (typeof value === 'string') {
-        if (view.feedList.filter((feed) => feed.link === value).length > 0) {
-          sayResult(false, i18next.t('repeatRSS'), feedback, input);
-          view.currentRSS = undefined;
-          return;
-        }
-        add.disabled = true;
-        input.readOnly = true;
-        downloadRSS(value)
-          .catch((e) => {
-            // console.error(e);
-            view.currentRSS = undefined;
-            if (e.message.search(/network/i) !== -1
-              || e.message.search(/internet/i) !== -1) sayResult(false, i18next.t('networkError'), feedback, input);
-            else sayResult(false, i18next.t('notRSS'), feedback, input);
-          }).then((result) => {
-            if (result === undefined) return;
-            view.feedList.push(result);
-            view.postList = filterAddPosts(view.postList, result.items);
-            sayResult(true, i18next.t('RSS200'), feedback, input);
-            view.currentRSS = undefined;
-          });
-      } else if (value === undefined) {
-        add.disabled = false;
-        input.readOnly = false;
-        input.value = '';
-      } else throw new Error('view.currentRSS = (undefined | string)');
-    } else if (path === 'feedList') {
-      fillFeeds(feeds, view.feedList);
-    } else if (path === 'postList') {
-      fillPosts(posts, view.postList, view.readenList, modalTitle, modalBody, modalLink);
+  const onChangeDispatcher = {};
+  onChangeDispatcher.isValidUrl = (value) => {
+    if (value === false) {
+      sayResult(false, i18next.t('urlInvalid'), feedback, input);
+    } else {
+      input.classList.remove('is-invalid');
+      feedback.textContent = '';
     }
-  });
+  };
+  onChangeDispatcher.currentRSS = (value) => {
+    if (typeof value === 'string') {
+      if (view.feedList.filter((feed) => feed.link === value).length > 0) {
+        sayResult(false, i18next.t('repeatRSS'), feedback, input);
+        view.currentRSS = undefined;
+        return;
+      }
+      add.disabled = true;
+      input.readOnly = true;
+      downloadRSS(value)
+        .catch((e) => {
+          // console.error(e);
+          view.currentRSS = undefined;
+          if (e.message.search(/network/i) !== -1
+            || e.message.search(/internet/i) !== -1) sayResult(false, i18next.t('networkError'), feedback, input);
+          else sayResult(false, i18next.t('notRSS'), feedback, input);
+        }).then((result) => {
+          if (result === undefined) return;
+          view.feedList.push(result);
+          view.postList = filterAddPosts(view.postList, result.items);
+          sayResult(true, i18next.t('RSS200'), feedback, input);
+          view.currentRSS = undefined;
+        });
+    } else if (value === undefined) {
+      add.disabled = false;
+      input.readOnly = false;
+      input.value = '';
+    } else throw new Error('view.currentRSS = (undefined | string)');
+  };
+  onChangeDispatcher.feedList = (value) => fillFeeds(feeds, value);
+  onChangeDispatcher.postList = (value) => (
+    fillPosts(posts, value, view.readenList, modalTitle, modalBody, modalLink)
+  );
+
+  const view = onChange(state, (path, value) => onChangeDispatcher[path](value));
   // refreshing
   const refresh = () => {
-    const promises = [];
-    view.feedList.forEach((feed) => {
-      promises.push(downloadRSS(feed.link)
-        .then((result) => {
-          if (result === undefined) return;
-          view.postList = filterAddPosts(view.postList, result.items);
-        }));
-    });
+    const promises = view.feedList.map((feed) => downloadRSS(feed.link)
+      .then((result) => {
+        if (result === undefined) return;
+        view.postList = filterAddPosts(view.postList, result.items);
+      }));
     Promise.all(promises).then(() => setTimeout(refresh, 5000));
   };
   setTimeout(refresh, 5000);
