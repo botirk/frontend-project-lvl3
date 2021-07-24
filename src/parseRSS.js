@@ -10,18 +10,18 @@ const generateItem = (itemEl) => {
   };
   result.hash = () => `${result.date}${result.link}`;
   return result;
-}
+};
 
 const parseRSS = (link, text) => {
   const xml = parser.parseFromString(text, 'application/xml');
   // console.log(xml);
 
   const { documentElement } = xml;
-  if (documentElement.tagName !== 'rss') throw new Error(`documentElement.tagName: ${tagName}`);
+  if (documentElement.tagName !== 'rss') throw new Error(`documentElement.tagName: ${documentElement.tagName}`);
   const channel = documentElement.firstElementChild;
-  if (channel.tagName !== 'channel') throw new Error(`documentElement.firstElementChild: ${tagName}`);
+  if (channel.tagName !== 'channel') throw new Error(`documentElement.firstElementChild: ${channel.tagName}`);
   const channelChildren = Array.from(channel.children);
-  
+
   const title = channelChildren.find((e) => e.tagName === 'title').textContent;
   const description = channelChildren.find((e) => e.tagName === 'description').textContent;
   const items = channelChildren.filter((e) => e.tagName === 'item').map(generateItem);
