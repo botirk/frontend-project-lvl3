@@ -70,10 +70,7 @@ const setRead = (link, post = undefined, readenList = undefined) => {
   if (post !== undefined && readenList !== undefined) readenList[post.hash()] = true;
 };
 
-const generatePost = (post, readenList, modalTitle, modalBody, modalLink) => {
-  const li = document.createElement('li');
-  li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
-
+const generatePostLink = (post, readenList) => {
   const link = document.createElement('a');
   link.href = post.link;
   link.classList.add('fw-bold');
@@ -83,8 +80,11 @@ const generatePost = (post, readenList, modalTitle, modalBody, modalLink) => {
   link.rel = 'noopener noreferrer';
   link.textContent = post.title;
   link.addEventListener('click', () => setRead(link, post, readenList));
-  li.appendChild(link);
 
+  return link;
+};
+
+const generatePostButton = (post, readenList, modalTitle, modalBody, modalLink, link) => {
   const button = document.createElement('button');
   button.type = 'button';
   button.classList.add('btn', 'btn-primary', 'btn-sm');
@@ -98,8 +98,15 @@ const generatePost = (post, readenList, modalTitle, modalBody, modalLink) => {
     modalLink.href = post.link;
     setRead(link, post, readenList);
   });
-  li.appendChild(button);
 
+  return button;
+};
+
+const generatePost = (post, readenList, modalTitle, modalBody, modalLink) => {
+  const li = document.createElement('li');
+  li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
+  const link = li.appendChild(generatePostLink(post, readenList));
+  li.appendChild(generatePostButton(post, readenList, modalTitle, modalBody, modalLink, link));
   return li;
 };
 
