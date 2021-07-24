@@ -70,6 +70,39 @@ const setRead = (link, post = undefined, readenList = undefined) => {
   if (post !== undefined && readenList !== undefined) readenList[post.hash()] = true;
 };
 
+const generatePost = (post, readenList, modalTitle, modalBody, modalLink) => {
+  const li = document.createElement('li');
+  li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
+
+  const link = document.createElement('a');
+  link.href = post.link;
+  link.classList.add('fw-bold');
+  if (readenList[post.hash()] === true) setRead(link);
+  link.dataset.id = '2';
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.textContent = post.title;
+  link.addEventListener('click', () => setRead(link, post, readenList));
+  li.appendChild(link);
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.classList.add('btn', 'btn-primary', 'btn-sm');
+  button.dataset.id = '2';
+  button.dataset.toggle = 'modal';
+  button.dataset.target = '#modal';
+  button.textContent = i18next.t('view');
+  button.addEventListener('click', () => {
+    modalTitle.textContent = post.title;
+    modalBody.textContent = post.description;
+    modalLink.href = post.link;
+    setRead(link, post, readenList);
+  });
+  li.appendChild(button);
+
+  return li;
+};
+
 const fillPosts = (postsHTML, postList, readenList, modalTitle, modalBody, modalLink) => {
   postsHTML.innerHTML = '';
   if (postList.length > 0) {
@@ -82,45 +115,9 @@ const fillPosts = (postsHTML, postList, readenList, modalTitle, modalBody, modal
     postsHTML.appendChild(ul);
   }
   const ul = postsHTML.lastElementChild;
-  postList.forEach((post) => {
-    const li = document.createElement('li');
-    li.classList.add('list-group-item');
-    li.classList.add('d-flex');
-    li.classList.add('justify-content-between');
-    li.classList.add('align-items-start');
-
-    const link = document.createElement('a');
-    link.href = post.link;
-    link.classList.add('fw-bold');
-    if (readenList[post.hash()] === true) setRead(link);
-    link.dataset.id = '2';
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.textContent = post.title;
-    link.addEventListener('click', () => {
-      setRead(link, post, readenList);
-    });
-    li.appendChild(link);
-
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.classList.add('btn');
-    button.classList.add('btn-primary');
-    button.classList.add('btn-sm');
-    button.dataset.id = '2';
-    button.dataset.toggle = 'modal';
-    button.dataset.target = '#modal';
-    button.textContent = i18next.t('view');
-    button.addEventListener('click', () => {
-      modalTitle.textContent = post.title;
-      modalBody.textContent = post.description;
-      modalLink.href = post.link;
-      setRead(link, post, readenList);
-    });
-    li.appendChild(button);
-
-    ul.appendChild(li);
-  });
+  postList.forEach((post) => (ul.appendChild(
+    generatePost(post, readenList, modalTitle, modalBody, modalLink),
+  )));
 };
 
 export default () => {
