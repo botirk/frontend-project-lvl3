@@ -65,15 +65,15 @@ const filterAddPosts = (postList, candidates) => {
 };
 
 const setRead = (link, post = undefined, readenList = undefined) => {
-  link.classList.remove('fw-bold');
-  link.classList.add('fw-normal');
+  link.classList.remove('font-weight-bold');
+  link.classList.add('font-weight-normal');
   if (post !== undefined && readenList !== undefined) readenList[post.hash()] = true;
 };
 
 const generatePostLink = (post, readenList) => {
   const link = document.createElement('a');
   link.href = post.link;
-  link.classList.add('fw-bold');
+  link.classList.add('font-weight-bold');
   if (readenList[post.hash()] === true) setRead(link);
   link.dataset.id = '2';
   link.target = '_blank';
