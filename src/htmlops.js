@@ -29,8 +29,8 @@ export const fillFeeds = (els, feedList) => {
 };
 
 const setPostRead = (link, post = undefined, readenList = undefined) => {
-  link.classList.remove('font-weight-bold', 'fw-bold');
-  link.classList.add('font-weight-normal', 'fw-normal');
+  link.classList.remove('fw-bold');
+  link.classList.add('fw-normal');
   if (post !== undefined && readenList !== undefined) readenList[post.hash()] = true;
 };
 

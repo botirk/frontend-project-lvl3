@@ -13,5 +13,5 @@ export default () => ({
   read: document.getElementById('read'),
   close: document.getElementById('close'),
   example: document.getElementById('example'),
-  form: document.getElementsByTagName('form')[0],
+  form: document.getElementById('rss-form'),
 });
