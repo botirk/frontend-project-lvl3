@@ -39,8 +39,8 @@ const createPostButton = (els, post, readenList, link) => {
   button.type = 'button';
   button.classList.add('btn', 'btn-primary', 'btn-sm');
   button.dataset.id = '2';
-  button.dataset.toggle = 'modal';
-  button.dataset.target = '#modal';
+  button.dataset.bsToggle = 'modal';
+  button.dataset.bsTarget = '#modal';
   button.textContent = i18next.t('view');
   button.addEventListener('click', () => {
     els.modalTitle.textContent = post.title;
