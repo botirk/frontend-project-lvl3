@@ -1,0 +1,17 @@
+export default () => ({
+  modalTitle: document.getElementsByClassName('modal-title')[0],
+  modalBody: document.getElementsByClassName('modal-body')[0],
+  modalLink: document.getElementsByClassName('full-article')[0],
+  input: document.getElementsByTagName('input')[0],
+  feedback: document.getElementById('feedback'),
+  add: document.getElementById('add'),
+  feeds: document.getElementById('feeds'),
+  posts: document.getElementById('posts'),
+  lead: document.getElementById('lead'),
+  title: document.getElementById('title'),
+  link: document.getElementById('link'),
+  read: document.getElementById('read'),
+  close: document.getElementById('close'),
+  example: document.getElementById('example'),
+  form: document.getElementsByTagName('form')[0],
+});

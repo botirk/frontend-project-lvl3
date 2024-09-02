@@ -1,4 +1,5 @@
 {
+    
     "env": {
         "browser": true,
         "es2021": true,
@@ -13,5 +14,8 @@
     },
     "ignorePatterns": ["dist"],
     "rules": {
+        "no-param-reassign": [2, { 
+            "props": false
+        }]
     }
 }

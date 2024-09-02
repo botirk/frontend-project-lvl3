@@ -11,7 +11,7 @@ export default {
     // template translation
     promo: 'Начните читать RSS сегодня! Это легко, это красиво.',
     title: 'RSS агрегатор',
-    example: 'Пример: https://ru.hexlet.io/lessons.rss',
+    example: 'Пример: https://lorem-rss.hexlet.app/feed',
     add: 'add',
     link: 'ссылка RSS',
     close: 'Закрыть',

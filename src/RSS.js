@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const parser = new DOMParser();
 
 const generateItem = (itemEl) => {
@@ -35,4 +37,9 @@ const parseRSS = (link, text) => {
   return result;
 };
 
-export default parseRSS;
+export default (link) => axios(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(link)}&disableCache=true`)
+  .then((resp) => {
+    const { status, contents } = resp.data;
+    if (status !== undefined && status.error !== undefined) throw new Error(status.error.code);
+    return parseRSS(link, contents);
+  });
