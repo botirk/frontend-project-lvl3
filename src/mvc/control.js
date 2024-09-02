@@ -34,10 +34,10 @@ export const onSubmit = (els, state) => {
         state.postList = filterAddPosts(state.postList, result.items);
       }).catch((exception) => {
         state.isSuccess = false;
-        if (exception.message.search(/network/i) !== -1 || exception.message.search(/internet/i) !== -1) { 
-          state.errorMessage = i18next.t('networkError'); 
-        } else { 
-          state.errorMessage = i18next.t('notRSS'); 
+        if (exception.message.search(/network/i) !== -1 || exception.message.search(/internet/i) !== -1) {
+          state.errorMessage = i18next.t('networkError');
+        } else {
+          state.errorMessage = i18next.t('notRSS');
         }
       }).finally(() => {
         state.isBusy = false;

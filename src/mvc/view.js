@@ -1,6 +1,7 @@
 import onChange from 'on-change';
 
 import model from './model';
+import { fillFeeds, fillPosts } from '../htmlops';
 
 export default (els) => {
   // model
@@ -31,11 +32,11 @@ export default (els) => {
   };
 
   vDispatcher.feedList = (value) => {
-    //fillFeeds(els, value);
+    fillFeeds(els, value);
   };
 
   vDispatcher.postList = (value) => {
-    //fillPosts(els, value, m.readenList);
+    fillPosts(els, value, m.readenList);
   };
 
   return onChange(
