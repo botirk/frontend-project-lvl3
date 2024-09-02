@@ -55,7 +55,7 @@ const createPostButton = (els, post, readenList, link) => {
 const createPostLink = (post, readenList) => {
   const link = document.createElement('a');
   link.href = post.link;
-  link.classList.add('font-weight-bold', 'fw-bold');
+  link.classList.add('fw-bold');
   if (readenList[post.hash()] === true) setPostRead(link);
   link.dataset.id = '2';
   link.target = '_blank';
