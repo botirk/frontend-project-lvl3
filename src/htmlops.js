@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 
-export const fillFeeds = (els, feedList) => {
+export const fillFeeds = (elsUnmuted, feedList) => {
+  const els = elsUnmuted;
   els.feeds.innerHTML = '';
   if (feedList.length > 0) {
     const name = document.createElement('h2');
@@ -28,13 +29,15 @@ export const fillFeeds = (els, feedList) => {
   });
 };
 
-const setPostRead = (link, post = undefined, readenList = undefined) => {
+const setPostRead = (link, post = undefined, readenListUnmuted = undefined) => {
+  const readenList = readenListUnmuted;
   link.classList.remove('fw-bold');
   link.classList.add('fw-normal');
   if (post !== undefined && readenList !== undefined) readenList[post.hash()] = true;
 };
 
-const createPostButton = (els, post, readenList, link) => {
+const createPostButton = (elsUnmuted, post, readenList, link) => {
+  const els = elsUnmuted;
   const button = document.createElement('button');
   button.type = 'button';
   button.classList.add('btn', 'btn-primary', 'btn-sm');
@@ -74,7 +77,8 @@ const createPost = (els, post, readenList) => {
   return li;
 };
 
-export const fillPosts = (els, postList, readenList) => {
+export const fillPosts = (elsUnmuted, postList, readenList) => {
+  const els = elsUnmuted;
   els.posts.innerHTML = '';
   if (postList.length > 0) {
     const name = document.createElement('h2');

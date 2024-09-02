@@ -1,9 +1,10 @@
 import onChange from 'on-change';
 
-import model from './model';
-import { fillFeeds, fillPosts } from '../htmlops';
+import model from './model.js';
+import { fillFeeds, fillPosts } from '../htmlops.js';
 
-export default (els) => {
+export default (elsUnmuted) => {
+  const els = elsUnmuted;
   // model
   const m = model();
 

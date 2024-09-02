@@ -1,6 +1,8 @@
 import i18next from 'i18next';
 
-export default (els) => {
+export default (elsUnmuted) => {
+  const els = elsUnmuted;
+
   document.title = i18next.t('title');
 
   els.lead.textContent = i18next.t('promo');

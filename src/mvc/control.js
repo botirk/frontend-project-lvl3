@@ -1,6 +1,6 @@
 import i18next from 'i18next';
-import downloadRSS from '../RSS';
-import validation from '../validation';
+import downloadRSS from '../RSS.js';
+import validation from '../validation.js';
 
 const filterAddPosts = (postList, candidates) => {
   const existing = postList.reduce((acc, post) => {
@@ -12,7 +12,9 @@ const filterAddPosts = (postList, candidates) => {
     .sort((a, b) => b.date - a.date);
 };
 
-export const onSubmit = (els, state) => {
+export const onSubmit = (elsUnmuted, stateUnmuted) => {
+  const els = elsUnmuted;
+  const state = stateUnmuted;
   // validation
   const validate = validation(state);
   // handle
@@ -46,7 +48,8 @@ export const onSubmit = (els, state) => {
   });
 };
 
-export const startRefresh = (state) => {
+export const startRefresh = (stateUnmuted) => {
+  const state = stateUnmuted;
   setTimeout(() => {
     const promises = state.feedList.map((feed) => downloadRSS(feed.link)
       .then((result) => {
