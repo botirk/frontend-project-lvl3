@@ -1,14 +1,16 @@
 import i18next from 'i18next';
-import { string } from 'yup';
+import * as yup from 'yup';
 
-export default (state) => {
-  const scheme = string().url(() => i18next.t('urlInvalid')).test('repeated list', () => i18next.t('repeatRSS'), (s) => state.feedList.find((feed) => feed.link === s) === undefined);
-  return (testedString) => {
-    try {
-      scheme.validateSync(testedString);
-      return undefined;
-    } catch (e) {
-      return e.errors[0];
-    }
-  };
+const scheme = yup.object().shape({
+  newUrl: yup.string().required().url(() => i18next.t('urlInvalid')),
+  existingUrls: yup.array(),
+}).test('repeated list', () => i18next.t('repeatRSS'), (urlObject) => !urlObject.existingUrls.includes(urlObject.newUrl));
+
+export default (urlObject) => {
+  try {
+    scheme.validateSync(urlObject);
+    return undefined;
+  } catch (e) {
+    return e.errors[0];
+  }
 };

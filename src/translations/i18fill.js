@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 
-export default (elsUnmuted) => {
-  const els = elsUnmuted;
+export default (elsUnmutated) => {
+  const els = elsUnmutated;
 
   document.title = i18next.t('title');
 

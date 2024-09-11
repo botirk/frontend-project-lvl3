@@ -12,17 +12,18 @@ const filterAddPosts = (postList, candidates) => {
     .sort((a, b) => b.date - a.date);
 };
 
-export const onSubmit = (elsUnmuted, stateUnmuted) => {
-  const els = elsUnmuted;
-  const state = stateUnmuted;
-  // validation
-  const validate = validation(state);
+export const onSubmit = (elsUnmutated, stateUnmutated) => {
+  const els = elsUnmutated;
+  const state = stateUnmutated;
   // handle
   els.form.addEventListener('submit', (e) => {
     e.preventDefault();
     const fData = new FormData(els.form);
     const url = fData.get('url');
-    const error = validate(url);
+    const error = validation({
+      newUrl: url,
+      existingUrls: state.feedList.map((feed) => feed.link),
+    });
     if (error) {
       state.isSuccess = false;
       state.errorMessage = error;
@@ -48,8 +49,8 @@ export const onSubmit = (elsUnmuted, stateUnmuted) => {
   });
 };
 
-export const startRefresh = (stateUnmuted) => {
-  const state = stateUnmuted;
+export const startRefresh = (stateUnmutated) => {
+  const state = stateUnmutated;
   setTimeout(() => {
     const promises = state.feedList.map((feed) => downloadRSS(feed.link)
       .then((result) => {

@@ -23,7 +23,6 @@ const init = () => {
   // controller
   onSubmit(els, state);
   // refresh
-  // console.log(state);
   startRefresh(state);
 };
 

@@ -25,15 +25,15 @@
   },
   "homepage": "https://github.com/botirk/frontend-project-lvl3#readme",
   "devDependencies": {
-    "eslint-plugin-import": "^2.22.1"
+    "eslint": "^7.26.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-config-airbnb": "^19.0.4"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "css-loader": "^5.2.4",
-    "eslint": "^8.57.0",
-    "eslint-config-airbnb": "^19.0.4",
     "html-webpack-plugin": "^5.3.1",
     "i18next": "^20.2.2",
     "jquery": "^3.6.0",

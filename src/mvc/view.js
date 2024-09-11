@@ -3,8 +3,8 @@ import onChange from 'on-change';
 import model from './model.js';
 import { fillFeeds, fillPosts } from '../htmlops.js';
 
-export default (elsUnmuted) => {
-  const els = elsUnmuted;
+export default (elsUnmutated) => {
+  const els = elsUnmutated;
   // model
   const m = model();
 
