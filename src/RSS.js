@@ -16,7 +16,6 @@ const generateItem = (itemEl) => {
 
 const parseRSS = (link, text) => {
   const xml = parser.parseFromString(text, 'application/xml');
-  // console.log(xml);
 
   const { documentElement } = xml;
   if (documentElement.tagName !== 'rss') throw new Error(`documentElement.tagName: ${documentElement.tagName}`);
